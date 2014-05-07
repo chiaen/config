@@ -1,0 +1,5 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =3
+let g:netrw_dirhist_1='/home/ernest/workspace/HTC/CSI/src/htc.com/csi/pp/crawl'
+let g:netrw_dirhist_2='/home/ernest/workspace/HTC/CSI/src/htc.com/csi/pp'
+let g:netrw_dirhist_3='/home/ernest/workspace/HTC/CSI/src/htc.com/csi/test'

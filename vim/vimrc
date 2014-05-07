@@ -1,22 +1,17 @@
-scriptencoding utf-8
-set encoding=utf-8
-set guifont=*
-set nu                         " set number line
 set nocompatible               " be iMproved
 filetype off                   " required!
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
 
-set t_Co=256
-set ttimeoutlen=50
 
 " let Vundle manage Vundle
 "required! 
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/Vundle.vim'
+
 Bundle 'cespare/vim-golang'
 Bundle 'Blackrush/vim-gocode'
-"Bundle 'bling/vim-airline'
+Bundle 'bling/vim-airline'
 Bundle 'ayang/AutoComplPop'
 
 Bundle "MarcWeber/vim-addon-mw-utils"
@@ -24,13 +19,51 @@ Bundle "tomtom/tlib_vim"
 Bundle "garbas/vim-snipmate"
 Bundle "honza/vim-snippets"
 Bundle 'tpope/vim-fugitive'
-Bundle 'itchyny/lightline.vim'
 Bundle 'itchyny/landscape.vim'
 
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+set t_Co=256
+set ttimeoutlen=50
+" 檔案編碼
+set encoding=utf-8
+set fileencodings=utf-8,cp950
+ 
+" 編輯喜好設定                                                                                                                                                                                                    
+syntax on        " 語法上色顯示
+set nocompatible " VIM 不使用和 VI 相容的模式
+" set ai           " 自動縮排
+set shiftwidth=4 " 設定縮排寬度 = 4
+set tabstop=4    " tab 的字元數
+set softtabstop=4
+" set expandtab   " 用 space 代替 tab
+ 
+set ruler        " 顯示右下角設定值
+set backspace=2  " 在 insert 也可用 backspace
+set ic           " 設定搜尋忽略大小寫
+set ru           " 第幾行第幾個字
+set hlsearch     " 設定高亮度顯示搜尋結果
+set incsearch    " 在關鍵字還沒完全輸入完畢前就顯示結果
+set smartindent  " 設定 smartindent
+set confirm      " 操作過程有衝突時，以明確的文字來詢問
+set history=100  " 保留 100 個使用過的指令
+set cursorline   " 顯示目前的游標位置
+ 
+colorscheme torte
+
+" GO Related Setting
+
 let g:SuperTabDefaultCompletionType = "context"
-
-
 set laststatus=2 " status line always visible
+
+" vim-airline
+let g:airline_powerline_fonts=1
+let g:airline_theme = 'understated'
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+let g:airline_linecolumn_prefix = '␊'
+let g:airline_branch_prefix = ''
 
 au Filetype go set makeprg=go\ build\ ./...
 nmap <F5> :make<CR>:copen<CR>
@@ -47,30 +80,3 @@ syntax on
 au FileType c,cpp,objc,objcpp,java,go call rainbow#load()
 au FileType go au BufWritePre <buffer> Fmt
 
-" vim-airline
-"let g:airline_powerline_fonts=1
-"let g:airline_theme = 'understated'
-"let g:airline_left_sep = '▶'
-"let g:airline_left_sep = ' '
-"let g:airline_right_sep = '«'
-"let g:airline_linecolumn_prefix = '␊'
-"let g:airline_branch_prefix = '⎇'
-
-
-let g:lightline = {
-      \ 'colorscheme': 'solarized',
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ],
-      \             [ 'fugitive', 'readonly', 'filename', 'modified' ] ]
-      \ },
-      \ 'component': {
-      \   'readonly': '%{&filetype=="help"?"":&readonly?"":""}',
-      \   'modified': '%{&filetype=="help"?"":&modified?"+":&modifiable?"":"-"}',
-      \   'fugitive': '%{exists("*fugitive#head")?fugitive#head():"||"}'
-      \ },
-      \ 'component_visible_condition': {
-      \   'readonly': '(&filetype!="help"&& &readonly)',
-      \   'modified': '(&filetype!="help"&&(&modified||!&modifiable))',
-      \   'fugitive': '(exists("*fugitive#head") && ""!=fugitive#head())'
-      \ },
-      \ }
