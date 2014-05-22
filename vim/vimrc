@@ -20,6 +20,9 @@ Bundle "garbas/vim-snipmate"
 Bundle "honza/vim-snippets"
 Bundle 'tpope/vim-fugitive'
 Bundle 'itchyny/landscape.vim'
+Bundle 'majutsushi/tagbar'
+Bundle 'scrooloose/syntastic'
+Bundle 'dgryski/vim-godef'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -67,9 +70,12 @@ let g:airline_branch_prefix = ''
 
 au Filetype go set makeprg=go\ build\ ./...
 nmap <F5> :make<CR>:copen<CR>
+nmap <F8> :TagbarToggle<CR>
 
 set shiftwidth=4
 set tabstop=4
+
+set tags=/home/ernest/workspace/HTC/CSI/src/gotags
 
 filetype off
 filetype plugin indent off
@@ -80,3 +86,58 @@ syntax on
 au FileType c,cpp,objc,objcpp,java,go call rainbow#load()
 au FileType go au BufWritePre <buffer> Fmt
 
+function! LoadCscope()
+  let db = findfile("cscope.out", ".;")
+  if (!empty(db))
+    let path = strpart(db, 0, match(db, "/cscope.out$"))
+    set nocscopeverbose " suppress 'duplicate connection' error
+    exe "cs add " . db . " " . path
+    set cscopeverbose
+  endif
+endfunction
+au BufEnter /* call LoadCscope()
+
+" 0 or s: Find this C symbol                    
+nmap <C-\>s :cs find s <C-R>=expand("<cword>")<CR><CR>
+" 1 or g: Find this definition
+nmap <C-\>g :cs find g <C-R>=expand("<cword>")<CR><CR>
+" 2 or d: Find functions called by this function
+nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+" 3 or c: Find functions calling this function
+nmap <C-\>c :cs find c <C-R>=expand("<cword>")<CR><CR>
+" 4 or t: Find this text string
+nmap <C-\>t :cs find t <C-R>=expand("<cword>")<CR><CR>
+" 6 or e: Find this egrep pattern
+nmap <C-\>e :cs find e <C-R>=expand("<cword>")<CR><CR>
+" 7 or f: Find this file
+nmap <C-\>f :cs find f <C-R>=expand("<cfile>")<CR><CR>
+
+let g:godef_split=3
+
+let g:tagbar_type_go = {
+    \ 'ctagstype' : 'go',
+    \ 'kinds'     : [
+        \ 'p:package',
+        \ 'i:imports:1',
+        \ 'c:constants',
+        \ 'v:variables',
+        \ 't:types',
+        \ 'n:interfaces',
+        \ 'w:fields',
+        \ 'e:embedded',
+        \ 'm:methods',
+        \ 'r:constructor',
+        \ 'f:functions'
+    \ ],
+    \ 'sro' : '.',
+    \ 'kind2scope' : {
+        \ 't' : 'ctype',
+        \ 'n' : 'ntype'
+    \ },
+    \ 'scope2kind' : {
+        \ 'ctype' : 't',
+        \ 'ntype' : 'n'
+    \ },
+    \ 'ctagsbin'  : 'gotags',
+    \ 'ctagsargs' : '-sort -silent'
+\ }
